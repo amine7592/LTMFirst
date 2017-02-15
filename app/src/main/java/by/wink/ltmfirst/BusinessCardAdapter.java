@@ -19,8 +19,8 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardAdapte
 
     public void addBusinessCard(BusinessCard bc){
 
-        dataSet.add(bc);
-        notifyItemInserted(dataSet.size() -1);
+        dataSet.add(0,bc);
+        notifyItemInserted(0);
     }
 
     public void setDataSet (ArrayList<BusinessCard> dataSet) {

@@ -3,7 +3,8 @@
     <string name="mail_hint">Insert you\'re e-mail</string>
     <string name="hello_world">Hello world!!!</string>
     <string name="article_abstract">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas accumsan rutrum aliquet. Vestibulum malesuada nulla sem, vel laoreet mi dapibus ut. Etiam posuere eget quam non consectetur. Quisque nec nunc tincidunt metus sollicitudin consequat et dignissim dolor. In ultricies lobortis odio quis finibus. Duis velit dui, tempus vitae tristique et.</string>
-    <string name="phone">327184566</string>
+    <string name="phone">phone</string>
+    <string name="phone_hint">phone number</string>
     <string name="call">Call</string>
     <string name="go">go</string>
     <string name="title">Amine Nokra</string>
@@ -16,4 +17,9 @@
     <string name="email">amine@wink.by</string>
     <string name="email_text">Hi, I\'m using this fantastic app</string>
     <string name="info">info</string>
+    <string name="student_name">Insert a student name</string>
+    <string name="student">Studente</string>
+    <string name="insert_student_name">Inserisci nuovo studente</string>
+    <string name="cancel">annulla</string>
+    <string name="done">Ok</string>
 </resources>

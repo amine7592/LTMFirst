@@ -1,16 +1,21 @@
 package by.wink.ltmfirst;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,16 +24,13 @@ import java.util.ArrayList;
  * Created by amine on 06/02/17.
  */
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends Activity {
 
     private static final String TAG = "MainActivity";
 
-    TextView phoneNumberTV;
-    Button callBtn, shareBtn;
-    private TextView addressTV, emailTextView;
     Intent intent;
     String email = "";
-    static LinearLayout layout;
+    static RelativeLayout layout;
 
 
     // recyclerView items
@@ -46,7 +48,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_main);
-        layout = (LinearLayout) findViewById(R.id.main_layout);
+        layout = (RelativeLayout) findViewById(R.id.main_layout);
         intent = getIntent();
 
         if (intent.getStringExtra(LoginActivity.EMAIL_KEY) != null) {
@@ -66,48 +68,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
         businessCardsRV.setLayoutManager(layoutManager);
         businessCardsRV.setAdapter(adapter);
 
-//        emailTextView = (TextView)findViewById(R.id.email_text_view);
-//        emailTextView.setText(email);
-//        phoneNumberTV = (TextView)findViewById(R.id.phone_numberTV);
-//        addressTV = (TextView)findViewById(R.id.address_textView);
-//        callBtn = (Button) findViewById(R.id.call_btn);
-//        shareBtn = (Button) findViewById(R.id.share_btn);
-//        callBtn.setOnClickListener(this);
-//        shareBtn.setOnClickListener(this);
-//        findViewById(R.id.send_mail_btn).setOnClickListener(this);
+        findViewById(R.id.add_student).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAddStudentDialog();
+            }
+        });
 
     }
 
 
-    @Override
-    public void onClick(View view) {
 
-//        if (view.getId() == R.id.call_btn) {
-//            Intent intent = new Intent();
-//
-//            intent.setAction(Intent.ACTION_VIEW);
-//            Uri uri = Uri.parse("tel:" + phoneNumberTV.getText().toString());
-//            intent.setData(uri);
-//            startActivity(intent);
-//
-//        } else if (view.getId() == R.id.share_btn) {
-//
-//            Intent intent = new Intent();
-//            intent.setAction(Intent.ACTION_VIEW);
-//            Uri uri = Uri.parse("geo:0,0?q=" + addressTV.getText().toString());
-//            intent.setData(uri);
-//            startActivity(intent);
-//
-//        } else if (view.getId() == R.id.send_mail_btn) {
-//            Intent intent = new Intent();
-//            intent.setAction(Intent.ACTION_SEND);
-//            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.email_text));
-//            intent.setType("text/plain");
-//            startActivity(intent);
-//
-//        }
-
-    }
 
     public static void  showSnackBar(String name){
 
@@ -120,6 +91,39 @@ public class MainActivity extends Activity implements View.OnClickListener {
         });
         snackbar.show();
 
+    }
+
+
+    public void showAddStudentDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_student_add, null);
+        dialogBuilder.setView(dialogView);
+
+        final EditText studentName = (EditText) dialogView.findViewById(R.id.dialog_student_name);
+        final EditText studentEmail = (EditText) dialogView.findViewById(R.id.dialog_student_email);
+        final EditText studentPhone = (EditText) dialogView.findViewById(R.id.dialog_student_phone);
+
+        dialogBuilder.setTitle(R.string.student);
+        dialogBuilder.setMessage(R.string.insert_student_name);
+        dialogBuilder.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //do something with edt.getText().toString();
+
+                BusinessCard businessCard = new BusinessCard(studentName.getText().toString(),
+                        studentEmail.getText().toString(),studentPhone.getText().toString(),LTM_COURSE,ELIS_ADDRESS);
+                adapter.addBusinessCard(businessCard);
+                businessCardsRV.scrollToPosition(0);
+
+            }
+        });
+        dialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //pass
+            }
+        });
+        AlertDialog b = dialogBuilder.create();
+        b.show();
     }
 
 
