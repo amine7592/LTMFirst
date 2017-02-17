@@ -9,7 +9,7 @@
         android:theme="@style/AppTheme">
 
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
 
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.SEND"/>-->
@@ -19,7 +19,7 @@
 
         </activity>
 
-        <activity android:name=".LoginActivity">
+        <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -31,7 +31,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity"/>
+        <activity android:name=".activities.RegisterActivity"/>
+        <activity android:name=".activities.BusinessCardDetailActivity"/>
 
     </application>
 

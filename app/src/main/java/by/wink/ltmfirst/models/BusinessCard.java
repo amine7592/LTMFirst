@@ -1,4 +1,4 @@
-package by.wink.ltmfirst;
+package by.wink.ltmfirst.models;
 
 /**
  * Created by amine on 15/02/17.
@@ -37,5 +37,7 @@ public class BusinessCard {
     }
 
 
-
+    public void setName(String name) {
+        this.name = name;
+    }
 }

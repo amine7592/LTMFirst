@@ -1,36 +1,38 @@
-package by.wink.ltmfirst;
+package by.wink.ltmfirst.activities;
 
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import by.wink.ltmfirst.R;
+import by.wink.ltmfirst.adapters.BusinessCardAdapter;
+import by.wink.ltmfirst.models.BusinessCard;
 
 /**
  * Created by amine on 06/02/17.
  */
 
 public class MainActivity extends Activity {
-
+    // constants
     private static final String TAG = "MainActivity";
+    public static final String BUSINESS_CARD_NAME = "BUSINESS_CARD_NAME";
+    private static final String ELIS_ADDRESS = "via Sandro Sandri 71";
+    private static final String LTM_COURSE = "LTM 11";
+    public static final int EDIT_NAME_REQUEST = 10;
+    public static final String BUSINESS_CARD_POSITION = "BUSINESS_CARD_POSITION";
 
     Intent intent;
     String email = "";
-    static RelativeLayout layout;
 
 
     // recyclerView items
@@ -38,9 +40,7 @@ public class MainActivity extends Activity {
     LinearLayoutManager layoutManager;
     BusinessCardAdapter adapter;
 
-    // constants
-    private static final String ELIS_ADDRESS = "via Sandro Sandri 71";
-    private static final String LTM_COURSE = "LTM 11";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,6 @@ public class MainActivity extends Activity {
 
         Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_main);
-        layout = (RelativeLayout) findViewById(R.id.main_layout);
         intent = getIntent();
 
         if (intent.getStringExtra(LoginActivity.EMAIL_KEY) != null) {
@@ -75,23 +74,12 @@ public class MainActivity extends Activity {
             }
         });
 
+        adapter.setDataSet(getBusinessCards());
+
+
     }
 
 
-
-
-    public static void  showSnackBar(String name){
-
-        Snackbar snackbar = Snackbar.make(layout,name,Snackbar.LENGTH_SHORT);
-        snackbar.setAction("OK", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        snackbar.show();
-
-    }
 
 
     public void showAddStudentDialog() {
@@ -106,24 +94,30 @@ public class MainActivity extends Activity {
 
         dialogBuilder.setTitle(R.string.student);
         dialogBuilder.setMessage(R.string.insert_student_name);
-        dialogBuilder.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                //do something with edt.getText().toString();
 
-                BusinessCard businessCard = new BusinessCard(studentName.getText().toString(),
-                        studentEmail.getText().toString(),studentPhone.getText().toString(),LTM_COURSE,ELIS_ADDRESS);
-                adapter.addBusinessCard(businessCard);
-                businessCardsRV.scrollToPosition(0);
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (i == DialogInterface.BUTTON_POSITIVE) {
+                    //do something with edt.getText().toString();
+
+                    BusinessCard businessCard = new BusinessCard(studentName.getText().toString(),
+                            studentEmail.getText().toString(), studentPhone.getText().toString(), LTM_COURSE, ELIS_ADDRESS);
+                    adapter.addBusinessCard(businessCard);
+                    businessCardsRV.scrollToPosition(0);
+
+                }
 
             }
-        });
-        dialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                //pass
-            }
-        });
+        };
+        dialogBuilder.setPositiveButton(R.string.done,dialogClickListener);
+
+
+        dialogBuilder.setNegativeButton(R.string.cancel,dialogClickListener);
         AlertDialog b = dialogBuilder.create();
         b.show();
+
+
     }
 
 
@@ -131,7 +125,7 @@ public class MainActivity extends Activity {
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "onStart");
-        adapter.setDataSet(getBusinessCards());
+        getBusinessCards();
 
     }
 
@@ -152,6 +146,19 @@ public class MainActivity extends Activity {
 
         return businessCards;
 
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == EDIT_NAME_REQUEST && resultCode ==RESULT_OK ){
+            int position = data.getIntExtra(BUSINESS_CARD_POSITION,0);
+            BusinessCard editedCard = adapter.getBusinessCard(position);
+            editedCard.setName(data.getStringExtra(BUSINESS_CARD_NAME));
+            adapter.editBusinessCard(editedCard,position);
+
+        }
 
     }
 

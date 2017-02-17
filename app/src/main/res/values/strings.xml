@@ -22,4 +22,7 @@
     <string name="insert_student_name">Inserisci nuovo studente</string>
     <string name="cancel">annulla</string>
     <string name="done">Ok</string>
+    <string name="hint_name">Inserisci un nome</string>
+    <string name="name_too_long">max 18 characters</string>
+    <string name="invalid_name">Il nome non può essere vuoto</string>
 </resources>
